@@ -10,10 +10,15 @@ class ScrapeData():
 
 	def main(self):
 		root = fromstring(raw_data)
-		messages = root[0].xpath('//message')
 
 	def get_xml(self):
 		"""
 		Makes an API Call and returns data as binary
 		"""
 		return requests.get(self.URL).content
+
+	def get_coord_list(self):
+		"""
+		Gives list of tree branches represneting <message> tags
+		"""
+		return self.get_xml(self)[0].xpath('//message')
