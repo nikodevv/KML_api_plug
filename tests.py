@@ -6,31 +6,28 @@ class TestScraper(unittest.TestCase):
 
 	def setUp(self):
 		self.scraper = ScrapeData()
+		self.URL = ("https://api.findmespot.com/spot-main-web/consumer/" + 
+			"rest-api/2.0/public/feed/0i9SOoPmAWhrgM15Yl41McqjrEbERSGiD/message.xml")
 
 	def test_gets_raw_xml_as_binary(self):
-		self.assertIsInstance(self.scraper.get_xml(), bytes)
+		self.assertIsInstance(self.scraper.get_xml(self.URL), bytes)
 
 	def test_xml_contains_coordinates(self):
 		"""
 		Checks that API call did not return an error;
 		Non-error responses contain coordinates for latitude
 		"""
-		self.assertIn('<latitude>', str(self.scraper.get_xml()))
+		self.assertIn('<latitude>', str(self.scraper.get_xml(self.URL)))
 
 	def test_gets_right_amount_of_messages(self):
 		"""
 		Tested against static file
 		"""
-		# Overriding ScrapeData function for testing purposes.
-		# The base function get_coord_list cannot be unit tested
-		# due to compositionality
-		def override_get_xml(self):
-			# f is unassigined until with statement
-			return fromstring(f.read())
-		self.scraper.get_xml = override_get_xml
-
 		with open('example_xml.xml','r') as f:
-			self.assertEqual(len(self.scraper.get_coord_list()), 50)
+			num_msgs = len(self.scraper.get_coord_list(fromstring(f.read())))
+			self.assertEqual( num_msgs, 50)
 
 	def test_returns_list_of_coordinates(self):
-		self.assertIsInstance(self.scraper.get_coord_list(), list)
+		with open('example_xml.xml','r') as f:
+			XML = fromstring(f.read())
+			self.assertIsInstance(self.scraper.get_coord_list(XML), list)
