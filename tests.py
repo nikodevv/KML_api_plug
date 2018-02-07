@@ -1,5 +1,5 @@
 import unittest
-from lxml.html import fromstring
+from lxml.etree import fromstring
 from data_gen import ScrapeData
 
 class TestScraper(unittest.TestCase):
@@ -31,3 +31,10 @@ class TestScraper(unittest.TestCase):
 		with open('example_xml.xml','r') as f:
 			XML = fromstring(f.read())
 			self.assertIsInstance(self.scraper.get_coord_list(XML), list)
+
+	def test_intentional_fail(self):
+		with open('example_xml.xml','r') as f:
+			XML = fromstring(f.read())
+			for message in  self.scraper.get_coord_list(XML):
+				# print([x.text for x in message])
+				self.fail([x.text for x in message])

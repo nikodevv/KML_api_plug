@@ -1,6 +1,6 @@
 import requests
 from lxml.html import fromstring
-
+from simplekml import Kml
 
 class ScrapeData():
 	"""Downloads data from API and manipulates it into a list of locations"""
@@ -19,3 +19,8 @@ class ScrapeData():
 		Gives list of tree branches represneting <message> tags
 		"""
 		return XML.xpath('//message')
+
+	def make_kml_object(self):
+		kml = Kml()
+		kml.document.name = "Test"
+		kml.newpoint()
