@@ -57,5 +57,4 @@ class ScrapeData():
 		kml = Kml()
 		for msg_data in msg_list:
 			self.create_point(kml, msg_data)
-		print(kml.kml())
 		return kml

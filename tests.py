@@ -15,9 +15,9 @@ class TestScraper(unittest.TestCase):
 		'custm_msg': 8,'dtime': 9, 'bat': 10,'hidden': 11,
 		'alt': 12
 		}
-		self.sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
-		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
-		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
+		self.sample_row1 = self.convert_list_to_etree(['913691903', '0-2440482', 
+			'Lima', '1517941403', 'UNLIMITED-TRACK', '-8.38843', '-74.63849', 
+			'SPOT3', 'Y', '2018-02-06T18:23:23+0000', 'GOOD', '0', '644'])
 		
 	def test_gets_raw_xml_as_binary(self):
 		self.assertIsInstance(self.scraper.get_xml(self.URL), bytes)
@@ -48,15 +48,14 @@ class TestScraper(unittest.TestCase):
 		# newpoint = kml.newpoint()
 		with open('example_xml.xml','r') as f:
 			XML = fromstring(str(f.read()))
-			print(list(self.scraper.get_coord_list(XML)[0]))
-			print(self.scraper.give_kml_obj(self.scraper.get_coord_list(XML)).kml())
-
+			self.fail("finish test")
 
 	def test_gets_time(self):
 		# Need 2 samples for 'Position #' check - not currently in code
-		sample_row2 = ['913686008', '0-2440482', 'Lima', '1517940807', 
-		'UNLIMITED-TRACK', '-8.74288', '-74.43631', 'SPOT3', 'Y', 
-		'2018-02-06T18:13:27+0000', 'GOOD', '0', '2027']
+		sample_row2 = self.convert_list_to_etree(
+			['913686008', '0-2440482', 'Lima', '1517940807', 
+			'UNLIMITED-TRACK', '-8.74288', '-74.43631', 'SPOT3', 'Y', 
+			'2018-02-06T18:13:27+0000', 'GOOD', '0', '2027'])
 		self.assertEqual(self.scraper.get_time(self.sample_row1), '18:23')
 		self.assertEqual(self.scraper.get_time(sample_row2), '18:13')
 
@@ -85,5 +84,13 @@ class TestScraper(unittest.TestCase):
 			XML = fromstring(f.read())
 			self.assertTrue(all(ord(c) < 128 for c in str(XML)))
 
-	def create_XML(self):
-		pass
+	def convert_list_to_etree(self, list_):
+		"""
+		used to conert test strings to the type of 
+		data returned by api.findmespot
+		"""
+		return [fromstring(self.to_xml(item)) for item in list_]
+
+	def to_xml(self,value):
+		"""wraps values in XML tags"""
+		return'<Element>' + str(value) +'</Element>'
