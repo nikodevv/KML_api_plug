@@ -32,11 +32,11 @@ class ScrapeData():
 		kml.document.name = "Test"
 		kml_points = map(self.create_one_point())
 
-	def create_one_point(self, kml, msg_data):
+	def create_point(self, kml, msg_data):
 		"""
 		returns a kml.newpoint object of the form
 		"""
-		point = kml.newpoint(name=self.get_date(msg_data[INDEX]))
+		point = kml.newpoint(name=self.get_time(msg_data))
 		return point
 
 

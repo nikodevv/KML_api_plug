@@ -1,6 +1,7 @@
 import unittest
 from lxml.etree import fromstring
 from data_gen import ScrapeData
+from simplekml import Kml
 
 class TestScraper(unittest.TestCase):
 
@@ -45,8 +46,8 @@ class TestScraper(unittest.TestCase):
 				# print([x.text for x in message])
 				self.fail([x.text for x in message])
 
-	def test_gets_right_time(self):
-		# Need 2 samples for 'Position #' check
+	def test_gets_time(self):
+		# Need 2 samples for 'Position #' check - not currently in code
 		sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
 		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
 		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
@@ -55,3 +56,11 @@ class TestScraper(unittest.TestCase):
 		'2018-02-06T18:13:27+0000', 'GOOD', '0', '2027']
 		self.assertEqual(self.scraper.get_time(sample_row1), '18:23')
 		self.assertEqual(self.scraper.get_time(sample_row2), '18:13')
+
+	def test_makes_point(self):
+		sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
+		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
+		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
+		kml = Kml()
+		point = self.scraper.create_point(kml, sample_row1)
+		self.assertEqual(point.name, '18:23')
