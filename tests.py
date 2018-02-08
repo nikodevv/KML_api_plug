@@ -1,7 +1,7 @@
 import unittest
 from lxml.etree import fromstring
 from data_gen import ScrapeData
-from simplekml import Kml
+from simplekml import Kml, Coordinates
 
 class TestScraper(unittest.TestCase):
 
@@ -15,7 +15,10 @@ class TestScraper(unittest.TestCase):
 		'custm_msg': 8,'dtime': 9, 'bat': 10,'hidden': 11,
 		'alt': 12
 		}
-
+		self.sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
+		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
+		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
+		
 	def test_gets_raw_xml_as_binary(self):
 		self.assertIsInstance(self.scraper.get_xml(self.URL), bytes)
 
@@ -40,27 +43,32 @@ class TestScraper(unittest.TestCase):
 			self.assertIsInstance(self.scraper.get_coord_list(XML), list)
 
 	def test_intentional_fail(self):
-		with open('example_xml.xml','r') as f:
-			XML = fromstring(f.read())
-			for message in  self.scraper.get_coord_list(XML)[2:]:
-				# print([x.text for x in message])
-				self.fail([x.text for x in message])
+		self.fail()
 
 	def test_gets_time(self):
 		# Need 2 samples for 'Position #' check - not currently in code
-		sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
-		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
-		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
 		sample_row2 = ['913686008', '0-2440482', 'Lima', '1517940807', 
 		'UNLIMITED-TRACK', '-8.74288', '-74.43631', 'SPOT3', 'Y', 
 		'2018-02-06T18:13:27+0000', 'GOOD', '0', '2027']
-		self.assertEqual(self.scraper.get_time(sample_row1), '18:23')
+		self.assertEqual(self.scraper.get_time(self.sample_row1), '18:23')
 		self.assertEqual(self.scraper.get_time(sample_row2), '18:13')
 
-	def test_makes_point(self):
-		sample_row1 = ['913691903', '0-2440482', 'Lima', '1517941403', 
-		'UNLIMITED-TRACK', '-8.38843', '-74.63849', 'SPOT3', 'Y', 
-		'2018-02-06T18:23:23+0000', 'GOOD', '0', '644']
+	def test_correct_pt_time(self):
 		kml = Kml()
-		point = self.scraper.create_point(kml, sample_row1)
+		point = self.scraper.create_point(kml, self.sample_row1)
 		self.assertEqual(point.name, '18:23')
+
+	def test_sets_altitudemode(self):
+		# Not sure if working as intended -- Check later ------------------------------------
+		kml = Kml()
+		point = self.scraper.create_point(kml, self.sample_row1)
+		self.assertEqual(point.altitudemode, 'clamptoground')
+
+	def test_sets_coords(self):
+		""" 
+		The coords are private variables, so they can't be 
+		tested directly. Instead this test just checks they exist
+		"""
+		kml = Kml()
+		point = self.scraper.create_point(kml, self.sample_row1)
+		self.assertIsInstance(point.coords, Coordinates)

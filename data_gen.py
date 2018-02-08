@@ -14,6 +14,8 @@ class ScrapeData():
 		'custm_msg': 8,'dtime': 9, 'bat': 10,'hidden': 11,
 		'alt': 12
 		}
+		# Not necessary: included because it was in the old file
+		self.description_str = "<![CDATA[Date: ]]><br/><![CDATA[Time: UTC]]>"
 
 	def get_xml(self, URL):
 		"""
@@ -36,14 +38,22 @@ class ScrapeData():
 		"""
 		returns a kml.newpoint object of the form
 		"""
-		point = kml.newpoint(name=self.get_time(msg_data))
+		# name, altitude mode have to be set in initialization 
+		point = kml.newpoint(name=self.get_time(msg_data), 
+			altitudemode='clamptoground') 
+		# original file coords also set height, but since every point
+		# had a height of 0, I don't bother with it.
+		point.coords = self.get_coords(msg_data)
+		point.description = self.description_str
 		return point
 
+	def get_coords(self,msg_data):
+		return (msg_data[self.indx['lat']],msg_data[self.indx['long']])
 
 	def get_time(self, msg_data):
 		""" currently missing 'position #' format """
 		# -13 and -8 indexes are consistent across all formats 
 		# I've seen. If this causes issues
 		# then regex should be used
-		time = msg_data[self.indx['dtime']][-13:-8]
-		return time
+		return msg_data[self.indx['dtime']][-13:-8]
+
