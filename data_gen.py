@@ -29,7 +29,7 @@ class ScrapeData():
 		"""
 		return fromstring(XML).xpath('//message')
 
-	def create_point(self, kml, msg_data, style):
+	def create_point(self, kml, msg_data, style=Style()):
 		"""
 		returns a kml.newpoint object of the form
 		"""

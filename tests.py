@@ -48,8 +48,8 @@ class TestScraper(unittest.TestCase):
 		# newpoint = kml.newpoint()
 		with open('example_xml.xml','r') as f:
 			XML = str(f.read())
-			for x in self.scraper.get_list_of_msgs(XML):
-				print(x[self.indx['lat']].text)
+			# for x in self.scraper.get_list_of_msgs(XML):
+			# 	print(x[self.indx['lat']].text)
 			self.fail("finish test")
 
 	def test_gets_time(self):
