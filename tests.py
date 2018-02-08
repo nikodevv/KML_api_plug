@@ -40,18 +40,7 @@ class TestScraper(unittest.TestCase):
 			XML = str(f.read())
 			self.assertIsInstance(self.scraper.get_list_of_msgs(XML), list)
 
-	def test_intentional_fail(self):
-		# kml = Kml()
-		# print(kml.kml())
-		# newpoint = kml.newpoint()
-		with open('example_xml.xml','r') as f:
-			XML = str(f.read())
-			# for x in self.scraper.get_list_of_msgs(XML):
-			# 	print(x[self.indx['lat']].text)
-			self.fail("finish test")
-
 	def test_gets_time(self):
-		# Need 2 samples for 'Position #' check - not currently in code
 		sample_row2 = self.convert_list_to_etree(
 			['913686008', '0-2440482', 'Lima', '1517940807', 
 			'UNLIMITED-TRACK', '-8.74288', '-74.43631', 'SPOT3', 'Y', 
