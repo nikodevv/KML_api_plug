@@ -34,16 +34,23 @@ class TestScraper(unittest.TestCase):
 		Tested against static file
 		"""
 		with open('example_xml.xml','r') as f:
-			num_msgs = len(self.scraper.get_coord_list(fromstring(f.read())))
+			num_msgs = len(self.scraper.get_coord_list(fromstring(str(f.read()))))
 			self.assertEqual( num_msgs, 50)
 
 	def test_returns_list_of_coordinates(self):
 		with open('example_xml.xml','r') as f:
-			XML = fromstring(f.read())
+			XML = fromstring(str(f.read()))
 			self.assertIsInstance(self.scraper.get_coord_list(XML), list)
 
 	def test_intentional_fail(self):
-		self.fail()
+		# kml = Kml()
+		# print(kml.kml())
+		# newpoint = kml.newpoint()
+		with open('example_xml.xml','r') as f:
+			XML = fromstring(str(f.read()))
+			print(list(self.scraper.get_coord_list(XML)[0]))
+			print(self.scraper.give_kml_obj(self.scraper.get_coord_list(XML)).kml())
+
 
 	def test_gets_time(self):
 		# Need 2 samples for 'Position #' check - not currently in code
@@ -72,3 +79,11 @@ class TestScraper(unittest.TestCase):
 		kml = Kml()
 		point = self.scraper.create_point(kml, self.sample_row1)
 		self.assertIsInstance(point.coords, Coordinates)
+	
+	def test_is_ascii(self):
+		with open('example_xml.xml','r') as f:
+			XML = fromstring(f.read())
+			self.assertTrue(all(ord(c) < 128 for c in str(XML)))
+
+	def create_XML(self):
+		pass

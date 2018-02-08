@@ -17,6 +17,7 @@ class ScrapeData():
 		# Not necessary: included because it was in the old file
 		self.description_str = "<![CDATA[Date: ]]><br/><![CDATA[Time: UTC]]>"
 
+
 	def get_xml(self, URL):
 		"""
 		Makes an API Call and returns data as binary
@@ -28,11 +29,6 @@ class ScrapeData():
 		Gives list of tree branches represneting <message> tags
 		"""
 		return XML.xpath('//message')
-
-	def make_kml_object(self): # Temporary function to be deleted
-		kml = Kml()
-		kml.document.name = "Test"
-		kml_points = map(self.create_one_point())
 
 	def create_point(self, kml, msg_data):
 		"""
@@ -48,12 +44,18 @@ class ScrapeData():
 		return point
 
 	def get_coords(self,msg_data):
-		return (msg_data[self.indx['lat']],msg_data[self.indx['long']])
+		return (msg_data[self.indx['lat']].text,msg_data[self.indx['long']].text)
 
 	def get_time(self, msg_data):
 		""" currently missing 'position #' format """
 		# -13 and -8 indexes are consistent across all formats 
 		# I've seen. If this causes issues
 		# then regex should be used
-		return msg_data[self.indx['dtime']][-13:-8]
+		return msg_data[self.indx['dtime']].text[-13:-8]
 
+	def give_kml_obj(self, msg_list):
+		kml = Kml()
+		for msg_data in msg_list:
+			self.create_point(kml, msg_data)
+		print(kml.kml())
+		return kml
