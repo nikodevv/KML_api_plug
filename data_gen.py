@@ -24,7 +24,7 @@ class ScrapeData():
 		"""
 		return requests.get(URL).content
 
-	def get_coord_list(self, XML):
+	def get_list_of_msgs(self, XML):
 		"""
 		Gives list of tree branches represneting <message> tags
 		"""
