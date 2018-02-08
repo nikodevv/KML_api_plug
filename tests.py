@@ -70,7 +70,7 @@ class TestScraper(unittest.TestCase):
 		# Not sure if working as intended -- Check later ------------------------------------
 		kml = Kml()
 		point = self.scraper.create_point(kml, self.sample_row1)
-		self.assertEqual(point.altitudemode, 'clamptoground')
+		self.assertEqual(point.altitudemode, 'clampedToGround')
 
 	def test_sets_coords(self):
 		""" 

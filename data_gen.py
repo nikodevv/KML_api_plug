@@ -35,7 +35,7 @@ class ScrapeData():
 		"""
 		# name, altitude mode have to be set in initialization 
 		point = kml.newpoint(name=self.get_time(msg_data), 
-			altitudemode='clamptoground') 
+			altitudemode='clampedToGround') 
 		point.coords = self.get_coords(msg_data)
 		point.style = style
 		point.description = self.description_str
