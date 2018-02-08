@@ -34,12 +34,12 @@ class TestScraper(unittest.TestCase):
 		Tested against static file
 		"""
 		with open('example_xml.xml','r') as f:
-			num_msgs = len(self.scraper.get_list_of_msgs(fromstring(str(f.read()))))
+			num_msgs = len(self.scraper.get_list_of_msgs(str(f.read())))
 			self.assertEqual( num_msgs, 50)
 
 	def test_returns_list_of_coordinates(self):
 		with open('example_xml.xml','r') as f:
-			XML = fromstring(str(f.read()))
+			XML = str(f.read())
 			self.assertIsInstance(self.scraper.get_list_of_msgs(XML), list)
 
 	def test_intentional_fail(self):
@@ -47,7 +47,9 @@ class TestScraper(unittest.TestCase):
 		# print(kml.kml())
 		# newpoint = kml.newpoint()
 		with open('example_xml.xml','r') as f:
-			XML = fromstring(str(f.read()))
+			XML = str(f.read())
+			for x in self.scraper.get_list_of_msgs(XML):
+				print(x[self.indx['lat']].text)
 			self.fail("finish test")
 
 	def test_gets_time(self):
