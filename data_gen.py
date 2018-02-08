@@ -1,6 +1,6 @@
 import requests
 from lxml.html import fromstring
-from simplekml import Kml
+from simplekml import Kml, Style
 from os.path import dirname, realpath, join
 
 class ScrapeData():
@@ -29,7 +29,7 @@ class ScrapeData():
 		"""
 		return fromstring(XML).xpath('//message')
 
-	def create_point(self, kml, msg_data):
+	def create_point(self, kml, msg_data, style):
 		"""
 		returns a kml.newpoint object of the form
 		"""
@@ -37,7 +37,7 @@ class ScrapeData():
 		point = kml.newpoint(name=self.get_time(msg_data), 
 			altitudemode='clamptoground') 
 		point.coords = self.get_coords(msg_data)
-		print(self.get_coords(msg_data))
+		point.style = style
 		point.description = self.description_str
 		return point
 
@@ -51,8 +51,11 @@ class ScrapeData():
 
 	def give_kml_obj(self, msg_list):
 		kml = Kml()
+		style = Style()
+		style.iconstyle.icon.href = (
+			'http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png')
 		for msg_data in msg_list:
-			self.create_point(kml, msg_data)
+			self.create_point(kml, msg_data, style)
 		return kml
 
 	def save_kml_obj(self, URL, DIR):
