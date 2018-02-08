@@ -6,7 +6,6 @@ from os.path import dirname, realpath, join
 class ScrapeData():
 	"""Downloads data from API and manipulates it into a list of locations"""
 	def __init__(self):
-		# consider refactoring so indexes are passed as arguments
 		self.indx = {
 		'id': 0, 'msngr_id': 1,'msngr_name': 2,'unixTime': 3,
 		'msg_typ': 4, 'lat': 5,'long': 6,'model_id': 7,

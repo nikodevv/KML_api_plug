@@ -25,14 +25,12 @@ class TestScraper(unittest.TestCase):
 	def test_xml_contains_coordinates(self):
 		"""
 		Checks that API call did not return an error;
-		Non-error responses contain coordinates for latitude
+		Checks that messages with coordinate attributes exist.
 		"""
 		self.assertIn('<latitude>', str(self.scraper.get_xml(self.URL)))
 
 	def test_gets_right_amount_of_messages(self):
-		"""
-		Tested against static file
-		"""
+		# Tested against static file
 		with open('example_xml.xml','r') as f:
 			num_msgs = len(self.scraper.get_list_of_msgs(str(f.read())))
 			self.assertEqual( num_msgs, 50)
