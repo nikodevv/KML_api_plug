@@ -45,14 +45,14 @@ class TestScraper(unittest.TestCase):
 			['913686008', '0-2440482', 'Lima', '1517940807', 
 			'UNLIMITED-TRACK', '-8.74288', '-74.43631', 'SPOT3', 'Y', 
 			'2018-02-06T18:13:27+0000', 'GOOD', '0', '2027'])
-		self.assertEqual(self.scraper.get_time(self.sample_row1), '18:23')
+		self.assertEqual(self.scraper.get_time(self.sample_row1), '18:23 UTC')
 		self.assertEqual(self.scraper.get_time(sample_row2, position_num=3), 
-			'Position 3 at 18:13')
+			'Position 3 @ 18:13 UTC')
 
 	def test_correct_pt_time(self):
 		kml = Kml()
 		point = self.scraper.create_point(kml, self.sample_row1)
-		self.assertEqual(point.name, '18:23')
+		self.assertEqual(point.name, '18:23 UTC')
 
 	def test_sets_altitudemode(self):
 		kml = Kml()

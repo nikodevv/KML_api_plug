@@ -38,15 +38,15 @@ class ScrapeData():
 		return point
 
 	def get_coords(self,msg_data):
-		return [(msg_data[self.indx['lat']].text, msg_data[self.indx['long']].text)]
+		return [(msg_data[self.indx['long']].text, msg_data[self.indx['lat']].text)]
 
 	def get_time(self, msg_data, position_num = None):
 		"""Sets the time and of a point and enumerates it via position #"""
 		# -13 and -8 indexes are consistent across all formats 
 		prefix = ''
 		if position_num != None:
-			prefix = "Position %s at " % position_num
-		return prefix + msg_data[self.indx['dtime']].text[-13:-8]
+			prefix = "Position %s @ " % position_num
+		return prefix + msg_data[self.indx['dtime']].text[-13:-8] + " UTC"
 
 	def create_lines_and_base_obj(self, msg_list):
 		"""
@@ -65,10 +65,10 @@ class ScrapeData():
 		messages' coordinates so they can be made into a LineString
 		"""
 		return [(
-			msg_data1[self.indx['lat']].text, 
-			msg_data1[self.indx['long']].text), (
-			msg_data2[self.indx['lat']].text, 
-			msg_data2[self.indx['long']].text)]
+			msg_data1[self.indx['long']].text, 
+			msg_data1[self.indx['lat']].text), (
+			msg_data2[self.indx['long']].text, 
+			msg_data2[self.indx['lat']].text)]
 
 	def create_line_sgmnt(self, kml, msg_list1, msg_list2):
 		"""
